@@ -1,0 +1,50 @@
+
+int Solution::solve(vector<int> &A, vector<int> &B) {
+    int n = A.size();
+    int min_ans = INT_MAX;
+  
+    
+    
+    for(int q = 1;q<n-1;q++)
+    {
+       int mid = A[q];
+        int minn = INT_MAX;
+        int ans =0;
+        for(int p = q-1;p>=0;p--)
+        { 
+            if(A[p]<mid)
+            {
+                minn = min(B[p],minn);
+            }
+        }
+        if (minn ==INT_MAX)
+        continue;
+        else
+        {
+            ans = ans+minn;
+            minn = INT_MAX;
+        }
+        for(int r=q+1;r<n;r++)
+        {
+            if(A[r]>mid)
+            {
+                minn = min(B[r],minn);
+            }
+            
+        }
+        if(minn==INT_MAX)
+        continue;
+        else
+        {
+            ans  = ans + minn;
+        }
+            ans +=B[q];
+            minn = INT_MAX;
+             min_ans = min(min_ans,ans);
+        
+    }
+    if(min_ans == INT_MAX)
+    return -1;
+    else
+    return min_ans;
+}
