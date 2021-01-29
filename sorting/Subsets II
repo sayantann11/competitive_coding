@@ -1,0 +1,94 @@
+Subsets II
+Problem Description
+
+Given a collection of integers denoted by array A of size N that might contain duplicates, return all possible subsets.
+
+NOTE:
+
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+The subsets must be sorted lexicographically.
+
+
+Problem Constraints
+0 <= N <= 16
+
+
+
+Input Format
+Only argument is an integer array A of size N.
+
+
+
+Output Format
+Return a 2-D vector denoting all the possible subsets.
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 2, 2]
+Input 2:
+
+ A = [1, 1]
+
+
+Example Output
+Output 1:
+
+ [
+    [],
+    [1],
+    [1, 2],
+    [1, 2, 2],
+    [2],
+    [2, 2]
+ ]
+Output 2:
+
+ [
+    [],
+    [1],
+    [1, 1]
+ ]
+
+
+Example Explanation
+Explanation 1:
+
+All the subsets of the array [1, 2, 2] in lexicographically sorted order.
+
+
+
+
+
+
+void generateSubsets(vector<int> &S, int index, vector<int> &current, vector<vector<int> > &result) {
+    if (index >= S.size()) {
+        result.push_back(current);
+        return;
+    }
+    // Find the number of occurence of the element at current index. 
+    int curIndex = index + 1;
+    while (curIndex < S.size() && S[curIndex] == S[index]) {
+        curIndex++;
+    }
+
+    // There are curIndex - index number of repeating entries. 
+    // Now we loop over the number of entries to include in our subset. 
+    for (int i = 0; i <= (curIndex - index); i++) {
+        for (int j = 0; j < i; j++) current.push_back(S[index]);
+        generateSubsets(S, curIndex, current, result);
+        for (int j = 0; j < i; j++) current.pop_back();
+    }
+}
+vector<vector<int> > Solution::subsetsWithDup(vector<int> &S) {
+    assert(S.size() >= 0 && S.size() <= 16);
+    vector<vector<int> > result; 
+    vector<int> current;
+    sort(S.begin(), S.end());
+    generateSubsets(S, 0, current, result);
+    sort(result.begin(), result.end());
+    return result;
+}
