@@ -1,0 +1,65 @@
+//Count array elements whose perfect squares are present in the given array
+//Difficulty Level : Easy
+// Last Updated : 27 Jan, 2021
+//Given an array arr[], the task is to find the count of array elements whose squares are already present in the array.
+//
+//Examples:
+//
+//Input: arr[] = {2, 4, 5, 20, 16}
+//Output: 2
+//Explanation:
+//{2, 4} has their squares {4, 16} present in the array.
+//
+//Input: arr[] = {1, 30, 3, 8, 64}
+//Output: 2
+//Explanation:
+//{1, 8} has their squares {1, 64} present in the array.
+//
+//
+//solution:
+#include<bits/stdc++.h> 
+using namespace std; 
+int  findsquares(vector<int>&a,int k)
+{
+    
+    int low = 0;
+    int high = a.size()-1;
+   while (low <= high) {
+    int mid = low + (high - low) / 2;
+
+    if (a[mid] == k)
+      return 1;
+    if (a[mid] < k)
+      low = mid + 1;
+
+    else
+      high = mid - 1;
+  }
+
+  return 0;
+}
+int main()
+{
+    vector<int>a;
+    
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        int x;
+        cin>>x;
+        a.push_back(x);
+    }
+    sort(a.begin(),a.end());
+    int count = 0;
+    for(int i=0;i<n;i++)
+    {   
+        if(findsquares(a,a[i]*a[i])==1)
+        {   cout<<a[i];
+            count++;
+        }
+    }
+    cout<<count;
+   
+    return 0;
+}
