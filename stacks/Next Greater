@@ -1,0 +1,84 @@
+Next Greater
+Problem Description
+
+Given an array A, find the next greater element G[i] for every element A[i] in the array. The Next greater Element for an element A[i] is the first greater element on the right side of A[i] in array, A.
+
+More formally:
+
+G[i] for an element A[i] = an element A[j] such that 
+    j is minimum possible AND 
+    j > i AND
+    A[j] > A[i]
+Elements for which no greater element exists, consider the next greater element as -1.
+
+
+
+Problem Constraints
+1 <= |A| <= 105
+
+1 <= A[i] <= 107
+
+
+
+Input Format
+The first and the only argument of input contains the integer array, A.
+
+
+
+Output Format
+Return an integer array representing the next greater element for each index in A.
+
+
+
+Example Input
+Input 1:
+
+ A = [4, 5, 2, 10] 
+Input 2:
+
+ A = [3, 2, 1] 
+
+
+Example Output
+Output 1:
+
+ [5, 10, 10, -1] 
+Output 2:
+
+ [-1, -1, -1] 
+
+
+Example Explanation
+Explanation 1:
+
+For 4, the next greater element towards its right is 5.
+For 5 and 2, the next greater element towards their right is 10.
+For 10, there is no next greater element towards its right.
+Explanation 2:
+
+As the array is in descending order, there is no next greater element for all the elements. 
+
+
+
+×
+You only need to implement the given function. Do not read input, instead use the arguments to the function. Do not print the output, instead return values as specified. Still have a doubt? Checkout Sample Codes for more details.
+
+vector<int> Solution::nextGreater(vector<int> &A) {
+    stack<int> s; 
+    s.push(0);
+    int n =  A.size();
+    vector<int> ans(n, -1);
+    for (int i = 1; i < n; i++){ 
+        if(s.empty()) { 
+            s.push(i); 
+            continue; 
+        } 
+        while (s.empty() == false && A[s.top()] < A[i]) 
+        {    
+            ans[s.top()] = A[i];
+            s.pop(); 
+        } 
+        s.push(i); 
+  } 
+  return ans;
+}
