@@ -1,0 +1,56 @@
+Sort the Linked List
+Problem Description
+Given a Linked List A of length N. Each number is represented by 2 consecutive nodes of the Linked List.
+
+Suppose 2->7->5->6 is the given Linked list. Then, the numbers are 27 and 56.
+Return the head of the sorted Linked List.
+
+Look at the example for further clarifications.
+
+
+Problem Constraints
+•	0 <= N <= 100000
+•	N is always even.
+
+
+Input Format
+First argument is the head pointer of the linkedlist.
+
+
+Output Format
+Return the head pointer of the sorted linkedlist as described.
+
+
+Example Input
+Input 1:
+5 -> 1 -> 0 -> 3.
+
+
+Example Output
+Output 1:
+0 -> 3 -> 5 -> 1.
+
+
+Example Explanation
+Explanation 1:
+First number is 51. Second number is 03.
+After sorting, the list becomes 0 -> 3 -> 5 -> 1.
+
+ListNode* Solution::solve(ListNode* A) {
+    vector<int> v;
+    ListNode* curr = A;
+    while(curr != NULL){
+        int a = curr->val;
+        int b = curr->next->val;
+        curr = curr->next->next;
+        v.push_back(10*a+b);
+    }
+    sort(v.begin(),v.end());
+    curr = A;
+    for(auto x:v){
+        curr->val = x/10;
+        curr->next->val = x%10;
+        curr = curr->next->next;
+    }
+    return A;
+}
