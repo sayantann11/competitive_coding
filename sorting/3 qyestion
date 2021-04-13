@@ -1,0 +1,192 @@
+Reverse pairs
+Problem Description
+Given an array of integers A, we call (i, j) an important reverse pair if i < j and A[i] > 2*A[j].
+Return the number of important reverse pairs in the given array A.
+
+
+Problem Constraints
+1 <= length of the array <= 100000
+1 <= A[i] <= 10^9
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+Output Format
+Return the number of important reverse pairs in the given array A.
+
+
+Example Input
+Input 1:
+ A = [1, 3, 2, 3, 1]
+Input 2:
+ A = [4, 1, 2]
+
+
+Example Output
+Output 1:
+ 2
+Output 2:
+ 1
+
+
+Example Explanation
+Explanation 1:
+ There are two pairs which are important reverse i.e (3, 1) and (3, 1).
+Explanation 2:
+ There is only one pair i.e (4, 1).
+
+void merge(vector<int>& a, int start, int mid, int end)
+{
+    int n1 = (mid - start + 1);
+    int n2 = (end - mid);
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++)
+        L[i] = a[start + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = a[mid + 1 + j];
+    int i = 0, j = 0;
+    for (int k = start; k <= end; k++) {
+        if (j >= n2 || (i < n1 && L[i] <= R[j]))
+            a[k] = L[i++];
+        else
+            a[k] = R[j++];
+    }
+}
+
+int mergesort_and_count(vector<int>& a, int start, int end){
+    if (start < end) {
+        int mid = (start + end) / 2;
+        int count = mergesort_and_count(a, start, mid) + mergesort_and_count(a, mid + 1, end);
+        int j = mid + 1;
+        for (int i = start; i <= mid; i++) {
+            while (j <= end && a[i] > a[j] * 2LL)
+                j++;
+            count += j - (mid + 1);
+        }
+        merge(a, start, mid, end);
+        return count;
+    }
+    else
+        return 0;
+}
+
+int Solution::solve(vector<int> &A) {
+    int n=A.size();
+    return mergesort_and_count(A,0,n-1);
+}
+Largest Number
+Problem Description
+Given a array A of non negative integers, arrange them such that they form the largest number.
+Note: The result may be very large, so you need to return a string instead of an integer.
+
+
+Problem Constraints
+1 <= len(A) <= 100000
+0 <= A[i] <= 2*109
+
+
+Input Format
+First argument is an array of integers.
+
+
+Output Format
+Return a string representing the largest number.
+
+
+Example Input
+Input 1:
+ A = [3, 30, 34, 5, 9]
+Input 2:
+ A = [2, 3, 9, 0]
+
+
+Example Output
+Output 1:
+ "9534330"
+Output 2:
+ "9320"
+
+
+Example Explanation
+Explanation 1:
+ A = [3, 30, 34, 5, 9]
+ Reorder the numbers to [9, 5, 34, 3, 30] to form the largest number.
+Explanation 2:
+ Reorder the numbers to [9, 3, 2, 0] to form the largest number 9320. 
+
+bool compareNum(string a, string b) {
+        return a + b > b + a;
+    }
+
+string Solution::largestNumber(const vector<int> &num) {
+    
+
+    string result;
+    vector<string> str;
+    for (int i = 0; i < num.size(); i++) {
+        str.push_back(to_string(num[i]));
+    }
+    
+    sort(str.begin(), str.end(), compareNum);
+    for (int i = 0; i < str.size(); i++) {
+        result += str[i];
+    }
+
+    int pos = 0;
+    while (result[pos] == '0' && pos + 1 < result.size()) pos++; 
+    return result.substr(pos);
+
+}
+Max Sum Contiguous Subarray
+Problem Description
+Find the contiguous subarray within an array, A of length N which has the largest sum.
+
+
+Problem Constraints
+1 <= N <= 1e6
+-1000 <= A[i] <= 1000
+
+
+Input Format
+The first and the only argument contains an integer array, A.
+
+
+Output Format
+Return an integer representing the maximum possible sum of the contiguous subarray.
+
+
+Example Input
+Input 1:
+ A = [1, 2, 3, 4, -10] 
+Input 2:
+ A = [-2, 1, -3, 4, -1, 2, 1, -5, 4] 
+
+
+Example Output
+Output 1:
+ 10 
+Output 2:
+ 6 
+
+
+Example Explanation
+Explanation 1:
+ The subarray [1, 2, 3, 4] has the maximum possible sum of 10. 
+Explanation 2:
+ The subarray [4,-1,2,1] has the maximum possible sum of 6. 
+class Solution {
+    public:
+        int maxSubArray(const vector<int> &A) {
+            int n = A.size();
+            int curSum = 0, maxSum = -1000000000;
+            for (int i = 0; i < n; i++) {
+                curSum += A[i];
+                maxSum = max(maxSum, curSum);
+                if (curSum < 0) curSum = 0;
+            }
+            return maxSum;
+        }
+};
+
