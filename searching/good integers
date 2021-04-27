@@ -1,0 +1,52 @@
+Good Integers
+Given 2 positive integers A and B.
+Find the number of Good integers less than or equal to A.
+An Integer let say K is Good if, K > 0 and (K - sum_of_digits(K)) >= B.
+
+Input Format
+The first argument given is an Integer A.
+The second argument given is an Integer B.
+Output Format
+Return an Integer X, number of Good integers.
+Constraints
+1 <= A <= 1e9
+1 <= B <= 1e9
+For Example
+Example Input:
+    A = 10
+    B = 1
+Example Output:
+    1
+
+Explanation:
+    There is only one Good Integer, i.e 10
+    here 10 <= 10 and
+    10 - sum_of_digits(10) = 10 - 1 = 9 >= 1
+// function to check if A is a good integer or not
+bool goodInteger(int A, int B) {
+    int sum = 0, temp = A;
+    while(temp) {
+        sum += (temp % 10);
+        temp /= 10;
+    }
+    return ((A-sum) >= B);
+}
+
+int Solution::solve(int A, int B) {
+    // initialize the variables
+    int b = 1, e = A, m;
+    // do binary search for the smallest k
+    while(b <= e) {
+        m = (b + e) >> 1;
+        // if curr is a good integer go left side
+        if(goodInteger(m, B)) {
+            e = m - 1;
+        }
+        // else go to the right side
+        else {
+            b = m + 1;
+        }
+    }
+    // return the number of good integers
+    return (A - e);
+}
