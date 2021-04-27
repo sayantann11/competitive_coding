@@ -1,0 +1,63 @@
+Maximum Number
+You have given an array A having N elements and an integer S.
+You have to find a maximum number X such that sum of all its subarrays of size X is less than or equal to S.
+You may assume that X will always exist.
+
+Input Format
+First argument is A, an Array of N Integers.  
+Second argument is S, an Integer.    
+Output Format
+Return a Maximum Number X such that sum of all its subarrays of size X is less than or equal to S.  
+Constraints
+1<= N <= 1e5  
+1 <= A[i] <= 1e7  
+1 <= S <= 1e7  
+For Example
+Example Input:  
+    A = [1, 3, 4, 2]  
+    S = 7  
+Example Output:  
+    2  
+
+Explanation:  
+    All subarrays of size 2 have the sum less than 7.  
+    Subarays are :  
+    1. [1, 3]  
+    2. [3, 4]  
+    3. [4, 2]  
+
+    You can prove that we can't choose X bigger than 2.
+int Solution::solve(vector<int> &A, int B) {
+    
+    int n = A.size();
+    int b = 1, e = n, m;
+    // do binary search for the maximum number X.
+    while(b <= e) {
+        // let m is X
+        m = (b + e) >> 1;
+        bool ok = 1;
+        long long sum = 0;
+        // take the sum of first subaarray of size m
+        for(int i = 0; i < m; i += 1) {
+            sum += A[i];
+        }
+        // if sum greater than B then we need to go on left side
+        if(sum > B) {
+            e = m - 1; continue;
+        }
+        // check sum of each subarray of size m
+        for(int i = m, j = 0; i < n; i += 1, j += 1) {
+            sum -= A[j];
+            sum += A[i];
+            if(sum > B) {
+                ok = 0; break;
+            }
+        }
+        // if sum of all subarrays of size m have sum less than or equal to S then go to left side.
+        if(ok) b = m + 1;
+        // else go to right side
+        else e = m - 1;
+    }
+    // return the maximum value of X
+    return e;
+}
