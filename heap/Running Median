@@ -1,0 +1,122 @@
+Running Median
+Problem Description
+Given an array of integers A denoting a stream of integers. New arrays of integer B and C are formed. Each time an integer is encountered in a stream, append it at the end of B and append median of array B at the C.
+Find and return the array C.
+NOTE:
+•	If the number of elements are N in B and N is odd then consider medain as B[N/2] ( B must be in sorted order).
+•	If the number of elements are N in B and N is even then consider medain as B[N/2-1]. ( B must be in sorted order).
+
+
+Problem Constraints
+1 <= length of the array <= 100000
+1 <= A[i] <= 109
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+Output Format
+Return an integer array C, C[i] denotes the median of first i elements.
+
+
+Example Input
+Input 1:
+ A = [1, 2, 5, 4, 3]
+Input 2:
+ A = [5, 17, 100, 11]
+
+
+Example Output
+Output 1:
+ [1, 1, 2, 2, 3]
+Output 2:
+ [5, 5, 17, 11]
+
+
+Example Explanation
+Explanation 1:
+ stream          median
+ [1]             1
+ [1, 2]          1
+ [1, 2, 5]       2
+ [1, 2, 5, 4]    2
+ [1, 2, 5, 4, 3] 3
+Explanation 2:
+ stream          median
+ [5]              5
+ [5, 17]          5
+ [5, 17, 100]     17
+ [5, 17, 100, 11] 11 
+priority_queue<int, vector<int>, greater <int> > min_heap;
+priority_queue<int> max_heap;
+
+void add(int a){
+    if( max_heap.size() && a >= max_heap.top())
+        min_heap.push(a);
+    else
+        max_heap.push(a);
+
+    if(abs(max_heap.size() - min_heap.size()) > 1){
+        if(max_heap.size() > min_heap.size()){
+            int temp = max_heap.top();
+            max_heap.pop();
+            min_heap.push(temp);
+        }
+        else{
+            int temp = min_heap.top();
+            min_heap.pop();
+            max_heap.push(temp);
+        }
+    }
+}
+
+int get_median(){
+    int total = min_heap.size() + max_heap.size();
+    int ret;
+    
+    if(total%2 == 1){
+        if(max_heap.size() > min_heap.size())
+            ret = max_heap.top();
+        else
+            ret = min_heap.top();
+    }
+    else{
+        ret = INT_MAX;
+        if(max_heap.empty() == false)
+            ret = min(ret,max_heap.top());
+        if(min_heap.empty() == false)
+            ret =min(ret,min_heap.top());
+    }
+    return ret;
+}
+
+
+vector<int> runningMedian(vector<int> &a){
+    
+    int n=a.size();
+    vector<int> ans;
+
+    assert(n>=1&&n<=100000);
+
+    // clear global variables
+    while(!min_heap.empty())
+        min_heap.pop();
+
+    while(!max_heap.empty())
+        max_heap.pop();
+
+    for(int i=0;i<n; ++i){
+        assert(a[i]>=1&&a[i]<=1000000000);
+        add(a[i]);
+        ans.push_back(get_median());
+        }
+
+    return ans;
+}
+
+
+vector<int> Solution::solve(vector<int> &A) {
+    
+    return runningMedian(A);
+}
