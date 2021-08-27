@@ -1,0 +1,84 @@
+Maximum fruits 2.0
+Problem Description
+
+You go to a fruit market, and you see N fruit sellers standing in a line, and each of them offers you or take away from you Ai amount of fruits, where A is an array of integers of size N. You are also given an integer B.
+
+You want to take home the maximum number of fruits to make your family happy, but the fruit sellers are very selfish.
+
+If you give/take fruits from a fruit seller at index i, the fruit sellers index in the range [i-B to i+B] won't offer/take fruits.
+
+What is the maximum number of fruits you can take finally?
+
+NOTE: It is also possible you choose none of the fruit sellers.
+
+Return the answer MOD 1000000007
+
+
+
+Problem Constraints
+1 <= N <= 10000
+-109 <= A[i] <= 109
+0 <= B <= N-1
+
+
+
+Input Format
+A: Array of integers denoting number of fruits each fruit seller might give/take.
+
+
+
+Output Format
+Maximum number of fruits you can take from the sellers. Return the answer MOD 109+7.
+
+
+
+Example Input
+A: [1, 2, -3, -5, 4, 6, -3, 2, -1, 2]
+B: 1
+
+
+
+Example Output
+12
+
+
+
+Example Explanation,
+
+
+
+
+typedef long long ll;
+ll MOD = 1000000007;
+
+int Solution::solve(vector<int> &A, int B) {
+
+    // Size of the given array
+    
+	ll n = A.size();
+	
+	// Size of dp array
+	
+	ll dp[n];
+	
+	// as for just one fruit seller, you would either choose him if he gives a positive amount of fruits, else we wont choose him if A[0] is negative, so our answer is 0.  
+	
+	dp[0]=max(0,A[0]);
+	
+	for(ll i=1;i<=B;i++){
+	
+	    // as either we choose the Bth fruit seller only, or we choose the best answer uptil the previous index.
+	    
+		dp[i]=max(dp[i-1],(ll)A[i]);
+		
+	}
+	for(ll i=B+1;i<n;i++){
+	    
+	    // if we choose the i<sup>th</sup> fruit seller, we cannot choose the i-Bth fruit sellers, so we will choose the i-B-1^th best answer and add A[i] to it, else we do not choose the current element and choose the i-1th best answer.
+	    
+		dp[i]=max(A[i]+dp[i-B-1],dp[i-1]);
+	}
+	return dp[n-1]%MOD;
+}
+
+We choose the fruit sellers at index 2, 6, 8 and 10, so the maximum fruits are 2+6+2+2 = 12
